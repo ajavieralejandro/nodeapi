@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const port = 3000;
+const errorHandler = require('./controllers/errorController/errorController');
 
 dotenv.config({
   path: './config.env'
@@ -32,3 +33,5 @@ app.listen(port, () => {
   console.log('Im running');
   console.log(process.env.PEP);
 });
+
+app.use(errorHandler);
