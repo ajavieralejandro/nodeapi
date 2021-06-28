@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 const crypto = require('crypto');
-const getSignToken = require('../utils/getJWT');
-const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-const APIFeatures = require('../utils/apiFeatures');
-const AppError = require('../utils/appError');
-const sendMail = require('../utils/email');
-const handlerFactory = require('../utils/handlerFactory');
+const getSignToken = require('../../utils/getJWT');
+const User = require('../../models/userModel');
+const catchAsync = require('../../utils/catchAsync');
+const APIFeatures = require('../../utils/apiFeatures');
+const AppError = require('../../utils/appError');
+var bodyParser = require('body-parser');
+
+//const sendMail = require('../../utils/email');
+const handlerFactory = require('../../utils/handlerFactory');
 
 const createSendToken = (user, statusCode, res) => {
   const cookieOptions = {
@@ -32,6 +34,8 @@ exports.signup = catchAsync(async (req, res, next) => {
   //bad practice
   //const newUser = await User.create(req.body);
   //new code
+  console.log('Hola estoy en sign up recibiendo : ');
+  console.log(req);
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -101,7 +105,7 @@ exports.restrictTo = (...roles) => (req, _res, next) => {
     );
   next();
 };
-
+/*
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   if (!req.body.email) return next(new AppError('Please privde an email', 404));
   const user = await User.findOne({ email: req.body.email });
@@ -129,6 +133,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     return next(new AppError('There was an error, try again later.', 500));
   }
 });
+*/
 exports.resetPassword = catchAsync(async (req, res, next) => {
   //console.log('RESET PASSWORD');
   //console.log('El token es : ', req.params.token);
