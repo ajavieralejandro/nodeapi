@@ -6,7 +6,6 @@ const User = require('../../models/userModel');
 const catchAsync = require('../../utils/catchAsync');
 const APIFeatures = require('../../utils/apiFeatures');
 const AppError = require('../../utils/appError');
-var bodyParser = require('body-parser');
 
 //const sendMail = require('../../utils/email');
 const handlerFactory = require('../../utils/handlerFactory');
