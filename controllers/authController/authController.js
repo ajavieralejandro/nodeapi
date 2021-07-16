@@ -6,6 +6,7 @@ const User = require('../../models/userModel');
 const catchAsync = require('../../utils/catchAsync');
 const APIFeatures = require('../../utils/apiFeatures');
 const AppError = require('../../utils/appError');
+const Contact = require('../../models/contactModel');
 
 //const sendMail = require('../../utils/email');
 const handlerFactory = require('../../utils/handlerFactory');
@@ -33,14 +34,17 @@ exports.signup = catchAsync(async (req, res, next) => {
   //bad practice
   //const newUser = await User.create(req.body);
   //new code
-  console.log('Hola estoy en sign up recibiendo : ');
-  console.log(req);
+
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm
   });
+
+  const newContact = await Contact.create({
+    user : newUser.id
+  })
   createSendToken(newUser, 201, res);
 });
 

@@ -18,6 +18,8 @@ userRouter.get('/me', userController.getMe, userController.getUser);
 userRouter.patch('/updateMe', userController.updateUser);
 userRouter.patch('/updatePassword', authController.updatePassword);
 
+userRouter.post('/addFriend',userController.addFriend);
+
 //Restrict to admin Routes
 
 userRouter.use(authController.restrictTo('admin'));
