@@ -30,24 +30,24 @@ exports.addFriend = catchAsync(async (req, res, next) => {
     data: contacts
   });
   
-
-  
 });
 
 exports.findFriends = catchAsync(async (req, res, next) => {
   let {name} = req.body;
   let users = await User.find({ name: { $regex:name, $options: 'i'}});
-  console.log("User es : ",users);
   res.status(200).json({
     status: 'success',
     data : {
       users
     }
   });
-  
-
-  
+    
 });
+
+exports.getContactsWithin = catchAsync(async (req,res,next)=>{
+  
+})
+
 
 
 

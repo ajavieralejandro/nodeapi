@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    enum: ['user','admin'],
     default: 'user',
   },
   password: {
@@ -64,6 +64,12 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  risk_status:{
+    type:String,
+    enum:['red','yellow','green'],
+    default:'green'
+  }
+  
 });
 
 userSchema.pre('save', async function (next) {
@@ -108,3 +114,4 @@ userSchema.methods.createPasswordResetToken = function () {
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+  

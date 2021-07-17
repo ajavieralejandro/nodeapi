@@ -7,6 +7,7 @@ const catchAsync = require('../../utils/catchAsync');
 const APIFeatures = require('../../utils/apiFeatures');
 const AppError = require('../../utils/appError');
 const Contact = require('../../models/contactModel');
+const Friend = require('../../models/friendsModel');
 
 //const sendMail = require('../../utils/email');
 const handlerFactory = require('../../utils/handlerFactory');
@@ -42,9 +43,14 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
   });
 
-  const newContact = await Contact.create({
+  //Creo las listas de contactos estrechos y amigos 
+  await Contact.create({
+    user : newUser.id
+  });
+  await Friend.create({
     user : newUser.id
   })
+
   createSendToken(newUser, 201, res);
 });
 
@@ -112,35 +118,8 @@ exports.restrictTo = (...roles) => (req, _res, next) => {
     );
   next();
 };
-/*
-exports.forgotPassword = catchAsync(async (req, res, next) => {
-  if (!req.body.email) return next(new AppError('Please privde an email', 404));
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) return next(new AppError('Please provide a valid email', 404));
-  const token = user.createPasswordResetToken();
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${token}`;
-  await user.save({ validateBeforeSave: false });
-  const message = `Forget your password? API URL to change  : ${resetURL} `;
-  try {
-    await sendMail({
-      email: user.email,
-      subject: 'Reset password, valid for 10 minutos',
-      message
-    });
-    res.status(200).json({
-      status: 'success',
-      message: 'Token sended to the email'
-    });
-  } catch (err) {
-    user.passwordResetToken = undefined;
-    user.passwordResetTokenExpires = undefined;
-    await user.save({ validateBeforeSave: false });
-    return next(new AppError('There was an error, try again later.', 500));
-  }
-});
-*/
+
+
 exports.resetPassword = catchAsync(async (req, res, next) => {
   //console.log('RESET PASSWORD');
   //console.log('El token es : ', req.params.token);
