@@ -15,6 +15,7 @@ const contacSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.ObjectId,
             ref:'User',
+            required:[true,'A friend must have an id'],
             date : Date.now()
         }
     ]

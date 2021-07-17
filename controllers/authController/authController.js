@@ -48,6 +48,8 @@ exports.signup = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 201, res);
 });
 
+
+
 exports.getUsers = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(User.find(), req.query)
     .filter()
@@ -62,6 +64,8 @@ exports.getUsers = catchAsync(async (req, res, next) => {
     data: { users }
   });
 });
+
+
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
