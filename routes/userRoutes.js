@@ -8,16 +8,17 @@ const userRouter = express.Router();
 // Free routes
 userRouter.post('/signup', authController.signup);
 userRouter.post('/login', authController.login);
-userRouter.post('/findFriends',userController.findFriends);
 
 
 //Protected Routes
 
 userRouter.use(authController.protectRoute);
+userRouter.post('/findFriends',userController.getContactsWithin,userController.findFriends);
+
 
 userRouter.delete('/deleteMe', userController.deleteMe);
 userRouter.get('/me', userController.getMe, userController.getUser);
-userRouter.patch('/updateMe', userController.updateUser);
+userRouter.patch('/updateMe', userController.getMe, userController.updateUser);
 userRouter.patch('/updatePassword', authController.updatePassword);
 
 userRouter.post('/addFriend',userController.addFriend);

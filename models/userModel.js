@@ -46,12 +46,13 @@ const userSchema = new mongoose.Schema({
     },
   },
   currentLocation:{
-    type : {
-      type : String, 
-      default: 'Point',
-      enum:['Point']
+    type: {
+      type: String,
+      enum: ['Point'],
     },
-    cordinates:[Number]
+    coordinates: {
+      type: [Number],
+    }
   },
   passwordChangedAt: {
     type: Date,
@@ -71,6 +72,9 @@ const userSchema = new mongoose.Schema({
   }
   
 });
+
+userSchema.index({currentLocation : '2dsphere'});
+
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
@@ -96,6 +100,7 @@ userSchema.methods.changedPassword = function (JWTTime) {
   if (JWTTime < this.passwordChangedAt.getTime() / 1000) toR = true;
   return toR;
 };
+
 
 userSchema.methods.createPasswordResetToken = function () {
   //Save the token hashed in the db and returns the resetToken

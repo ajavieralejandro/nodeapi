@@ -45,7 +45,20 @@ exports.findFriends = catchAsync(async (req, res, next) => {
 });
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
+  console.log("Aca pasa algo");
+  console.log(req.user.currentLocation);
+  const [long,lat] = req.user.currentLocation.coordinates;
+  const radius = 200000/6378.1;
+  console.log(long,lat,radius);
+  console.log("Quiero ver que onda");
+  const users = await User.find({currentLocation : {$geoWithin : {
+    $centerSphere : [[long,lat],radius]
+  } }})
+  console.log(users);
   
+  console.log("Hasta aca llego bien");
+ next();
+
 })
 
 
