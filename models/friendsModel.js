@@ -11,7 +11,7 @@ const friendSchema = new mongoose.Schema({
         ref:'User',
         required:[true,'Contacts must belong to an user']
     },
-    contacts:[
+    friends:[
         {
             type: mongoose.Schema.ObjectId,
             ref:'User',

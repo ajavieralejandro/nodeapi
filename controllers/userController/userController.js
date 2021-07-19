@@ -62,6 +62,11 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
 })
 
 
+exports.calculateRisk = catchAsync(async (req,res,next)=>{
+  
+})
+
+
 
 
 
