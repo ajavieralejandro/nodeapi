@@ -13,22 +13,21 @@ const Friend = require('../../models/friendsModel');
 const handlerFactory = require('../../utils/handlerFactory');
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
-    console.log("Aca pasa algo");
-    console.log(req.user.currentLocation);
+    if(!req.user.currentLocation.cordinates)
+        next(new AppError("Update user cordinates",400));
     const [long,lat] = req.user.currentLocation.coordinates;
     const radius = 200000/6378.1;
-    console.log(long,lat,radius);
-    console.log("Quiero ver que onda");
-    const users = await User.find({currentLocation : {$geoWithin : {
+    const contactsWithin = await User.find({currentLocation : {$geoWithin : {
       $centerSphere : [[long,lat],radius]
     } }})
-    console.log(users);
-    
-    console.log("Hasta aca llego bien");
-   next();
+    res.status(204).json({
+        status: 'success',
+        data: contactsWithin
+      });
   
   })
 
+  //Falta chequear que el id del contacto a agregar sea el correto...
   exports.addContact = catchAsync(async (req, res, next) => {
     let contacts = await Contact.findOne({user : req.user._id});
     contacts.contacts.push(req.contact_id);
@@ -39,5 +38,24 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
     });
     
   });
+
+  exports.addContacts = catchAsync(async (req, res, next) => {
+    let {users} = req;
+    let contacts = await Contact.findOne({user : req.user._id});
+    users.forEach(user => {
+        const aux = User.findById(user._id);
+        if(!aux)
+            next(new AppError("No user with that id"));
+        conctacs.push(user._id);
+    }
+    )
+    await contacts.save();
+    res.status(204).json({
+      status: 'success',
+      data: contacts
+    });
+    
+  });
+
 
  

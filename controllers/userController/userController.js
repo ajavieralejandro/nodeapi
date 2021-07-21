@@ -51,9 +51,15 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
   const radius = 200000/6378.1;
   console.log(long,lat,radius);
   console.log("Quiero ver que onda");
+  const aux = Date.now();
+
   const users = await User.find({currentLocation : {$geoWithin : {
-    $centerSphere : [[long,lat],radius]
-  } }})
+    $centerSphere : [[long,lat],radius],
+  },
+},
+ currentLocationDate: {$lte:new Date()+(30 * 60 * 1000),$gte: new Date()-(30 * 60 * 1000)}
+
+})
   console.log(users);
   
   console.log("Hasta aca llego bien");

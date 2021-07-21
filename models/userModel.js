@@ -52,8 +52,13 @@ const userSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
+    },
+    date:{
+      type : Date,
+      default : Date.now()
     }
   },
+  currentLocationDate:Date,
   passwordChangedAt: {
     type: Date,
     default: Date.now(),

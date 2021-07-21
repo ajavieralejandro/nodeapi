@@ -12,7 +12,11 @@ exports.deleteById = Model =>
 
 exports.UpdateById = Model =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.updateOne(req.params.id, req.body, {
+    //patch for the user...
+    if(req.params.id.currentLocation){
+      req.params.id.currentLocationDate = new Date();
+    }
+    const doc = await Model.findOneAndUpdate({_id : req.params.id._id}, req.body, {
       new: true,
       runValidators: true
     });
