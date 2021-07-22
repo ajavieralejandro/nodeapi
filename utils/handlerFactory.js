@@ -13,16 +13,21 @@ exports.deleteById = Model =>
 exports.UpdateById = Model =>
   catchAsync(async (req, res, next) => {
     //patch for the user...
-    if(req.params.id.currentLocation){
-      req.params.id.currentLocationDate = new Date();
+    
+    if(req.body){
+      req.body.currentLocationDate = new Date();
     }
+    console.log("El usuario a insertar es : ");
+    console.log(req.params.id);
+    console.log(req.params.body);
     const doc = await Model.findOneAndUpdate({_id : req.params.id._id}, req.body, {
       new: true,
       runValidators: true
     });
     if (!doc)
       return next(new AppError("Doesn't found a document with that id", 404));
-      console.log("The doc is : ",doc);
+      console.log("El doc a devolver es :");
+      console.log(doc);
     res.status(200).send({
       message: 'success',
       data: doc

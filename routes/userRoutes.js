@@ -1,13 +1,19 @@
 //requirements
 const express = require('express');
+const contactRouter = require('./contactRoutes');
+//Controllers
 const authController = require('../controllers/authController/authController');
 const userController = require('../controllers/userController/userController');
-
 const userRouter = express.Router();
+
+//nested routes
+
+userRouter.use('/contacts',contactRouter);
 
 // Free routes
 userRouter.post('/signup', authController.signup);
 userRouter.post('/login', authController.login);
+
 
 
 //Protected Routes
@@ -34,6 +40,8 @@ userRouter
   .route('/:id')
   .delete(authController.deleteUser)
   .get(userController.getUser);
+
+
 
 /*
 

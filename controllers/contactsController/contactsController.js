@@ -13,14 +13,24 @@ const Friend = require('../../models/friendsModel');
 const handlerFactory = require('../../utils/handlerFactory');
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
-    if(!req.user.currentLocation.cordinates)
-        next(new AppError("Update user cordinates",400));
+    if(!req.user.currentLocation.coordinates)
+        return next(new AppError("Update user cordinates",400));
+
+        //testing dates comparassion
+
+        const _currentDate = req.user.currentLocationDate;
+        const _date1 = new Date(Date.now()-(30*60*1000)) ;
+        const _date2 = new Date(Date.now()+(30*60*1000)) ;
     const [long,lat] = req.user.currentLocation.coordinates;
     const radius = 200000/6378.1;
     const contactsWithin = await User.find({currentLocation : {$geoWithin : {
       $centerSphere : [[long,lat],radius]
-    } }})
-    res.status(204).json({
+    },
+}
+,   currentLocationDate: {$gte:_date1,$lte:_date2}
+
+})
+    res.status(200).json({
         status: 'success',
         data: contactsWithin
       });
@@ -56,6 +66,13 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
     });
     
   });
+
+  exports.test = catchAsync(async (req,res,next)=>{
+    res.status(204).json({
+        status: 'success',
+        message : 'hola'
+      });
+  })
 
 
  
