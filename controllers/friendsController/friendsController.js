@@ -27,3 +27,21 @@ exports.addFriend = catchAsync(async (req, res, next) => {
     });
     
   });
+
+  exports.deleteFriend = catchAsync(async (req, res, next) => {
+    //busco al usuario y lo agrego a mi lista de amigos
+    let friend = await User.findOne({user : req.body.friend_id});
+    if(!friend)
+    next( new AppError("No user with that id",404));
+    let friends = await Friend.findOne({user : req.user._id});
+    friends.friends.push(req.friend_id);
+    await friends.save();
+    res.status(204).json({
+      status: 'success',
+      data: contacts
+    });
+    
+  });
+
+
+  
