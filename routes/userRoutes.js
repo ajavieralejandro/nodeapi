@@ -1,6 +1,10 @@
 //requirements
 const express = require('express');
 const contactRouter = require('./contactRoutes');
+const multer = require('multer');
+const upload = multer({
+  dest : 'public/img/users'
+});
 //Controllers
 const authController = require('../controllers/authController/authController');
 const userController = require('../controllers/userController/userController');
@@ -24,7 +28,7 @@ userRouter.post('/findFriends',userController.getContactsWithin,userController.f
 
 userRouter.delete('/deleteMe', userController.deleteMe);
 userRouter.get('/me', userController.getMe, userController.getUser);
-userRouter.patch('/updateMe', userController.getMe, userController.updateUser);
+userRouter.patch('/updateMe', userController.updateUser);
 userRouter.patch('/updatePassword', authController.updatePassword);
 
 userRouter.post('/addFriend',userController.addFriend);

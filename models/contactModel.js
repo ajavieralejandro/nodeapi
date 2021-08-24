@@ -11,6 +11,20 @@ const contacSchema = new mongoose.Schema({
         ref:'User',
         required:[true,'Contacts must belong to an user']
     },
+    currentLocation:{ 
+        type: {
+          type: String,
+          enum: ['Point'],
+          default:'Point',
+    
+        },
+        coordinates: {
+          type: [Number],
+          required:[true,'User contatac must have a current location']
+     
+        }
+      },
+    currentLocationDate:Date,
     contacts:[
         {
             type: mongoose.Schema.ObjectId,

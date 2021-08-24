@@ -13,13 +13,16 @@ exports.deleteById = Model =>
 exports.UpdateById = Model =>
   catchAsync(async (req, res, next) => {
     //patch for the user...
-    
-    if(req.body){
+    /*
+    console.log(req.body);
+    if(req.body.currentLocation){
       req.body.currentLocationDate = new Date();
+      req.body.currentLocation.isValid = true;
     }
     console.log("El usuario a insertar es : ");
     console.log(req.params.id);
     console.log(req.params.body);
+    */
     const doc = await Model.findOneAndUpdate({_id : req.params.id._id}, req.body, {
       new: true,
       runValidators: true
