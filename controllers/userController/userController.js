@@ -4,7 +4,20 @@ const Contact = require('../../models/contactModel');
 const factory = require('../../utils/handlerFactory');
 
 exports.getUser = factory.getOne(User);
-exports.updateUser = factory.UpdateById(User);
+exports.updateUser = catchAsync(async (req,res,next)=>{
+  const filterObj = factory.filterObject(req.body,'name','email','risk_status');
+  let doc = await User.findOneAndUpdate({_id : req.user._id}, filterObj, {
+    new: true,
+    runValidators: true
+  });
+  if (!doc)
+    return next(new AppError("Doesn't found a user with that id, please login again", 404));
+  res.status(200).send({
+    message: 'success',
+    data: doc
+  });
+
+})
 exports.deleteUser = factory.deleteById(User);
 
 exports.getMe = (req, res, next) => {

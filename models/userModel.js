@@ -45,27 +45,6 @@ const userSchema = new mongoose.Schema({
       },
     },
   },
-  currentLocation:{ 
-    type: {
-      type: String,
-      enum: ['Point'],
-      default:'Point',
-
-    },
-    coordinates: {
-      type: [Number],
-      default: [0,0]     
-    },
-    isValid:{
-      type : Boolean,
-      default: false
-    },
-    date:{
-      type : Date,
-      default : Date.now()
-    },
-  },
-  currentLocationDate:Date,
   passwordChangedAt: {
     type: Date,
     default: Date.now(),
