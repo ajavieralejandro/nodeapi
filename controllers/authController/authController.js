@@ -88,6 +88,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.protectRoute = catchAsync(async (req, res, next) => {
   //checking t2hat the token exist
+  //Getting the token and check 
   let token = null;
   if (
     req.headers.authorization &&
@@ -99,6 +100,7 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   const user = await User.findById(decoded.id).select('+password');
   if (!user) return next(new AppError('The user not longer exists', 401));
+  //Check if user change password
   if (user.changedPassword(decoded.iat))
     return next(new AppError('The Token is not longer valid', 401));
   req.user = user;
@@ -157,6 +159,12 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteUser = handlerFactory.deleteById(User);
+
+exports.getIn = catchAsync(async(req,res,next)=>{
+  const {user} = req;
+  createSendToken(user, 200, res);
+
+})
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   //console.log('Hi im on the update password route');

@@ -23,6 +23,7 @@ userRouter.post('/login', authController.login);
 //Protected Routes
 
 userRouter.use(authController.protectRoute);
+userRouter.get('/getIn',authController.getIn);
 userRouter.post('/findFriends',userController.getContactsWithin,userController.findFriends);
 
 
