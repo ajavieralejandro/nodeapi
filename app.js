@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 const errorHandler = require('./controllers/errorController/errorController');
 var bodyParser = require('body-parser');
 
@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
   res.status(200).send('hello from server');
 });
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log('Im running');
   console.log(process.env.PEP);
 });
