@@ -37,9 +37,9 @@ mongoose
     console.log('Database connected');
   });
 
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/admin',adminRouter);
-app.use('/api/v1/friends',friendsRouter);
+//app.use('/api/v1/users', userRouter);
+//app.use('/api/v1/admin',adminRouter);
+//app.use('/api/v1/friends',friendsRouter);
 
 app.get('/', (req, res) => {
   res.status(200).send('hello from server');
