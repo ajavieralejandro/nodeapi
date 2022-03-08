@@ -12,6 +12,16 @@ const Friend = require('../../models/friendsModel');
 //const sendMail = require('../../utils/email');
 const handlerFactory = require('../../utils/handlerFactory');
 
+exports.findFriend = catchAsync(async (req,res,next)=>{
+  console.log("Hola");
+  let friends = await User.find({'name': {'$regex': `${req.body.name}` }});
+  res.status(200).send({
+    data: friends
+
+})
+
+})
+
 
 exports.addFriend = catchAsync(async (req, res, next) => {
     //busco al usuario y lo agrego a mi lista de amigos

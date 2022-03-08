@@ -5,6 +5,13 @@ const factory = require('../../utils/handlerFactory');
 
 exports.getUser = factory.getOne(User);
 
+exports.hola = (req,res,next) =>{
+    res.status(200).send({
+        message : 'hola'
+
+    })
+}
+
 
 exports.updateUser = catchAsync(async (req,res,next)=>{
   const filterObj = factory.filterObject(req.body,'name','email','risk_status');  
