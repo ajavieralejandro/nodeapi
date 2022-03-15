@@ -31,14 +31,15 @@ const handleDuplicateFieldsDb = err => {
 };
 
 const sendErrorProduction = (err, res) => {
+  console.log(err);
   if (err.isOperational)
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       message: err.message
-    });
+    })
   else {
     console.error('ERROR : ', err);
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: 'Something went wrong'
     });
@@ -46,26 +47,39 @@ const sendErrorProduction = (err, res) => {
 };
 
 module.exports = (err, req, res, next) => {
+  //Changing for debbugin in production
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
+
+
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
-    //console.log('Hola estoy entrando acá');
+
+    console.log('Hola estoy entrando acá');
+    console.log("El error es : ");
+    console.log(err);
     //console.log(err);
     //console.log(err.name);
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let error = { ...err };
+    console.log(error);
     // eslint-disable-next-line no-constant-condition
     if (err.name === 'CastError') error = handleCastErrorDb(error);
+    else
     if (err.code === 11000) error = handleDuplicateFieldsDb(error);
+    else
     if (err.name === 'ValidationError') error = handleValidationErrorDb(error);
+    else
     //Invalid Token signature
     if (err.name === 'JsonWebTokenError') error = handleJWTError();
-    //Expired Token
+    else
+    //Expired Tokens
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
-    sendErrorProduction(error, res);
+    else
+    sendErrorProduction(err, res);
   }
+  
 
   next();
 };
