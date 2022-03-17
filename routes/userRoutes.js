@@ -24,8 +24,7 @@ userRouter.post('/login', authController.login);
 
 userRouter.use(authController.protectRoute);
 userRouter.post('/findFriends',userController.getContactsWithin,userController.findFriends);
-
-
+userRouter.post('/setCurrentLocation',userController.setCurrentLocation);
 userRouter.delete('/deleteMe', userController.deleteMe);
 userRouter.get('/me', userController.getMe, userController.getUser);
 userRouter.patch('/updateMe', userController.updateUser);
@@ -36,7 +35,7 @@ userRouter.post('/addFriend',userController.addFriend);
 
 //Restrict to admin Routes
 
-userRouter.use(authController.restrictTo('admin'));
+//userRouter.use(authController.restrictTo('admin'));
 
 userRouter.route('/').get(authController.getUsers);
 

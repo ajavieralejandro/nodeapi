@@ -35,8 +35,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   //bad practice
   //const newUser = await User.create(req.body);
   //new code
-  console.log("Hola");
-  console.log(req.body);
+ ;
 
   const newUser = await User.create({
     name: req.body.name,
@@ -91,6 +90,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.protectRoute = catchAsync(async (req, res, next) => {
   //checking t2hat the token exist
+  console.log("hola 1");
   let token = null;
   if (
     req.headers.authorization &&
@@ -98,8 +98,13 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   )
     token = req.headers.authorization.split(' ')[1];
   if (!token) return next(new AppError('You are not logged!', 401));
+  console.log("hola 2");
+
   //2)Verification Token
+  
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  console.log("hola 3");
+
   const user = await User.findById(decoded.id).select('+password');
   if (!user) return next(new AppError('The user not longer exists', 401));
   if (user.changedPassword(decoded.iat))
@@ -110,6 +115,7 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
 
 //should have an user added to the req first
 exports.restrictTo = (...roles) => (req, _res, next) => {
+  console.log("Hola aparezco aca");
   //
   if (!req.user)
     return next(

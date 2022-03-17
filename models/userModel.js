@@ -65,7 +65,17 @@ const userSchema = new mongoose.Schema({
     type:String,
     enum:['red','yellow','green'],
     default:'green'
-  }
+  },
+  currentLocation:{ 
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+    },
+    coordinates: {
+      type: [Number],
+    }
+  },
+currentLocationDate:Date,
   
 });
 

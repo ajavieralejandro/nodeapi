@@ -31,7 +31,8 @@ const handleDuplicateFieldsDb = err => {
 };
 
 const sendErrorProduction = (err, res) => {
-  console.log(err);
+  console.log("a ver que pasa");
+  console.log("error es :",err);
   if (err.isOperational)
     return res.status(err.statusCode).json({
       status: err.status,
@@ -50,20 +51,19 @@ module.exports = (err, req, res, next) => {
   //Changing for debbugin in production
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
+  
 
 
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
+    console.log("Hola estoy en prod");
 
-    console.log('Hola estoy entrando acá');
-    console.log("El error es : ");
-    console.log(err);
     //console.log(err);
     //console.log(err.name);
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let error = { ...err };
-    console.log(error);
+    console.log(err.name);
     // eslint-disable-next-line no-constant-condition
     if (err.name === 'CastError') error = handleCastErrorDb(error);
     else
@@ -78,8 +78,11 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
     else
     sendErrorProduction(err, res);
+    console.log(error);
+    return res.status(error.statusCode).json({
+      status: error.status,
+      message: error.message
+    })
   }
   
-
-  next();
 };

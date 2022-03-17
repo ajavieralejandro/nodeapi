@@ -2,6 +2,7 @@ const catchAsync = require('../../utils/catchAsync');
 const User = require('../../models/userModel');
 const Contact = require('../../models/contactModel');
 const factory = require('../../utils/handlerFactory');
+const AppError = require('../../utils/appError');
 
 exports.getUser = factory.getOne(User);
 
@@ -21,6 +22,37 @@ exports.updateUser = catchAsync(async (req,res,next)=>{
 
 })
 exports.deleteUser = factory.deleteById(User);
+
+
+exports.setCurrentLocation = catchAsync(async (req,res,next)=>{
+  console.log("Hola estoy aca seteando la locacion");
+  console.log(req.body);
+  console.log("Ese fue el body");
+  if(req.body.latitude==undefined || req.body.longitude==undefined)
+    return next(new AppError("Send latitude and longitude to update location",400));
+  let toUpdate =  {
+    "type" : "Point",
+    "coordinates" : [
+      -122.5,
+      37.7
+    ]
+  };  
+  
+  let user = await User.findOne({_id : req.user._id});
+  if (!user)
+    return next(new AppError("Doesn't found a user with that id, please login again", 404));
+  user.currentLocation = toUpdate;
+  user.currentLocationDate = Date.now();
+  user.save();
+
+  res.status(200).send({
+    message: 'success',
+    data: user
+  });
+
+
+
+})
 
 exports.getMe = (req, res, next) => {
   req.params.id = req.user;
