@@ -74,8 +74,11 @@ const userSchema = new mongoose.Schema({
     coordinates: {
       type: [Number],
     }
+
   },
-currentLocationDate:Date,
+currentLocationDate:{
+  type : Date
+},
   
 });
 

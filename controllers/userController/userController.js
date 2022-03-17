@@ -33,8 +33,8 @@ exports.setCurrentLocation = catchAsync(async (req,res,next)=>{
   let toUpdate =  {
     "type" : "Point",
     "coordinates" : [
-      -122.5,
-      37.7
+      req.body.latitude,
+      req.body.longitude
     ]
   };  
   
@@ -43,7 +43,7 @@ exports.setCurrentLocation = catchAsync(async (req,res,next)=>{
     return next(new AppError("Doesn't found a user with that id, please login again", 404));
   user.currentLocation = toUpdate;
   user.currentLocationDate = Date.now();
-  user.save();
+  user.save({ validateBeforeSave: false });
 
   res.status(200).send({
     message: 'success',

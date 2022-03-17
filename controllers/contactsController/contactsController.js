@@ -14,9 +14,11 @@ const Handler = require('../../utils/handlerFactory');
 const handlerFactory = require('../../utils/handlerFactory');
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
-    if(!req.user.currentLocation.coordinates)
+  let user = await User.findOne({_id : req.user._id});
+    if(!user.currentLocation.coordinates)
         return next(new AppError("Update user cordinates",400));
         //testing dates comparassion
+    console.log(user);
     const _currentDate = req.user.currentLocationDate;
     const _date1 = new Date(_currentDate.getTime()-(30*60*1000)) ;
     const _date2 = new Date(_currentDate.getTime()+(30*60*1000)) ;
