@@ -25,6 +25,9 @@ userRouter.post('/login', authController.login);
 userRouter.use(authController.protectRoute);
 userRouter.post('/findFriends',userController.getContactsWithin,userController.findFriends);
 userRouter.post('/setCurrentLocation',userController.setCurrentLocation);
+userRouter.get('/getLocations',userController.getLocations);
+userRouter.get('/updateLocations',userController.updateLocations);
+
 userRouter.delete('/deleteMe', userController.deleteMe);
 userRouter.get('/me', userController.getMe, userController.getUser);
 userRouter.patch('/updateMe', userController.updateUser);

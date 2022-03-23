@@ -112,6 +112,35 @@ exports.findFriends = catchAsync(async (req, res, next) => {
     
 });
 
+exports.getLocations = catchAsync(async (req,res,next)=>{
+  let user = req.user;
+  let locations = user.locations;
+  res.status(200).json({
+    status: 'success',
+    data : {
+      locations
+    }
+  });
+  
+})
+
+exports.updateLocations = catchAsync(async (req,res,next)=>{
+  console.log("Estoy en update locations");
+  let user = req.user;
+  let locations = user.locations;
+  user.locations = locations.filter(location=>
+    location.currentDate>Date.now()-1000 * 60 * 60 * 24 * 0.5);
+  locations = user.locations;
+  res.status(200).json({
+    status: 'success',
+    data : {
+      locations
+    }
+  });
+  
+})
+
+
 //Test Only 
 exports.getAllUsers = catchAsync(async (req,res,next)=>{
   let users = await User.find();
