@@ -79,6 +79,7 @@ const userSchema = new mongoose.Schema({
 currentLocationDate:{
   type : Date
 },
+  locations : Array
   
 });
 

@@ -3,6 +3,7 @@ const User = require('../../models/userModel');
 const Contact = require('../../models/contactModel');
 const factory = require('../../utils/handlerFactory');
 const AppError = require('../../utils/appError');
+const Locations = require('../../models/locationsModel');
 
 exports.getUser = factory.getOne(User);
 
@@ -39,10 +40,29 @@ exports.setCurrentLocation = catchAsync(async (req,res,next)=>{
   };  
   
   let user = await User.findOne({_id : req.user._id});
+  console.log("hola llego aca");
   if (!user)
     return next(new AppError("Doesn't found a user with that id, please login again", 404));
   user.currentLocation = toUpdate;
   user.currentLocationDate = Date.now();
+  toUpdate.locationDate = Date.now();
+  console.log("Me fijo que pasa en el array de locaciones");
+  console.log(user.locations);
+  user.locations.push(toUpdate);
+  console.log(user.locations);
+
+  
+
+  //inserto current location en el arreglo de locaciones
+  /*
+  if(!user.locations)
+    user.locations = [];
+  
+    user.locations.push(_locationToIns);
+*/
+
+  
+
   user.save({ validateBeforeSave: false });
 
   res.status(200).send({
