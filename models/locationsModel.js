@@ -4,6 +4,12 @@ const mongoose = require('mongoose');
 
 const locationsSchema = new mongoose.Schema({
 
+  user:{
+    type: mongoose.Schema.ObjectId,
+    ref:'User',
+    required:[true,'A location must belong to an user']
+},
+
     
     currentLocation:{ 
         type: {

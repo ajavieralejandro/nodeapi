@@ -45,13 +45,15 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
   });
 
+
+
   //Creo las listas de contactos estrechos y amigos 
-  await Contact.create({
-    user : newUser.id
+  let _contacts = await Contact.create({
+    user : newUser.id,
+    contacts : []
   });
-  await Friend.create({
-    user : newUser.id
-  })
+  console.log("Contacts es : ",_contacts);
+  _contacts.save();
 
   createSendToken(newUser, 201, res);
 });

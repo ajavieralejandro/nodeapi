@@ -8,6 +8,7 @@ const upload = multer({
 //Controllers
 const authController = require('../controllers/authController/authController');
 const userController = require('../controllers/userController/userController');
+const contactsController = require('../controllers/contactsController/contactsController');
 const userRouter = express.Router();
 
 //nested routes
@@ -17,6 +18,7 @@ userRouter.use('/contacts',contactRouter);
 // Free routes
 userRouter.post('/signup', authController.signup);
 userRouter.post('/login', authController.login);
+userRouter.get('/test',userController.test);
 
 
 

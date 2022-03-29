@@ -14,23 +14,36 @@ const Handler = require('../../utils/handlerFactory');
 const handlerFactory = require('../../utils/handlerFactory');
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
+  var ObjectId = require('mongoose').Types.ObjectId; 
+
   let user = await User.findOne({_id : req.user._id});
     if(!user.currentLocation.coordinates)
         return next(new AppError("Update user cordinates",400));
         //testing dates comparassion
     console.log(user);
     const _currentDate = req.user.currentLocationDate;
-    const _date1 = new Date(_currentDate.getTime()-(30*60*1000)) ;
-    const _date2 = new Date(_currentDate.getTime()+(30*60*1000)) ;
+    const _date1 = new Date(_currentDate.getTime()-(3*60*1000)) ;
+    const _date2 = new Date(_currentDate.getTime()+(3*60*1000)) ;
     const [long,lat] = req.user.currentLocation.coordinates;
     const radius = 200000/6378.1;
-    const contactsWithin = await Contact.find({currentLocation : {$geoWithin : {
+    const contactsWithin = await User.find({currentLocation : {$geoWithin : {
       $centerSphere : [[long,lat],radius]
-    },
+    }, 
 }
    ,currentLocationDate: {$gte:_date1,$lte:_date2}
+   , _id : {$ne: req.user._id}
 
 })
+
+    for(contact of contactsWithin){
+      console.log('iterando');
+      console.log(req.user._id);
+      console.log(contact)
+      let _contactAux = await Contact.create({user1:req.user._id,user2:contact._id});
+       _contactAux.save();
+    }
+
+
     res.status(200).json({
         status: 'success',
         data: contactsWithin
@@ -56,6 +69,9 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
 
 
 
+
+
+
   //Falta testear
   exports.addContact = catchAsync(async (req, res, next) => {
     let contacts = await Contact.findOne({user : req.user._id});
@@ -73,11 +89,25 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
 
 
   //Get Contacts Falta Testear
-  exports.getContacts = catchAsync(async (req, res, next) => {
-    let contacts = await Contact.findOne({user : req.user._id});
-    //let contactsAux = await  Handler.getOne(Contact,req.user._id);
+  exports.getUserContacts = catchAsync(async (req, res, next) => {
+  
+    var ObjectId = require('mongoose').Types.ObjectId; 
+  
+    let _contacts = await Contact.find({$or :[{user1 :new ObjectId(req.user._id)},{user2 :new ObjectId(req.user._id)}] }).populate('user1').populate('user2');
+    let contacts = [];
+    for(contact of _contacts){
+      let id1 = new ObjectId(req.user._id);
+      let id2 = new ObjectId(contact.user1._id);
 
-    res.status(204).json({
+
+  
+      if(!id1.equals(id2))
+        contacts.push(contact.user1)
+      else
+        contacts.push(contact.user2);
+      contacts = [...new Set(contacts)];
+    };
+    res.status(200).json({
       status: 'success',
       data: contacts
     });
@@ -114,7 +144,9 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
   exports.test = catchAsync(async (req,res,next)=>{
     res.status(204).json({
         status: 'success',
-        message : 'hola'
+        data : {
+          message : 'hola'
+        }
       });
   })
 

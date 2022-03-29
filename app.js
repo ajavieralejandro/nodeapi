@@ -11,6 +11,8 @@ var bodyParser = require('body-parser');
 const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const friendsRouter = require('./routes/friendRoutes');
+const locationRouter = require('./routes/locationRoutes');
+const contactRouter = require('./routes/contactRoutes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -40,6 +42,8 @@ mongoose
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/admin',adminRouter);
 app.use('/api/v1/friends',friendsRouter);
+app.use('/api/v1/locations',locationRouter);
+app.use('/api/v1/contacts',contactRouter);
 
 app.get('/', (req, res) => {
   res.status(200).send('hello from server');

@@ -9,6 +9,6 @@ contactRouter.use(authController.protectRoute);
 contactRouter.get('/updateContacts',contactsController.updateContacts);
 contactRouter.get('/test',contactsController.test);
 contactRouter.get('/getContactsWithin',contactsController.getContactsWithin);
-contactRouter.get('/',contactsController.getContacts);
-contactRouter.post('/',contactsController.addContacts);
+contactRouter.get('/',contactsController.getUserContacts);
+
 module.exports = contactRouter;

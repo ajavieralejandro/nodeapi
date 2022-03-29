@@ -6,33 +6,20 @@ const crypto = require('crypto');
 
 const contacSchema = new mongoose.Schema({
 
-    user:{
+    user1:{  
         type: mongoose.Schema.ObjectId,
         ref:'User',
         required:[true,'Contacts must belong to an user']
     },
-    currentLocation:{ 
-        type: {
-          type: String,
-          enum: ['Point'],
-          default:'Point',
-    
-        },
-        coordinates: {
-          type: [Number],
-          required:[true,'User contatac must have a current location']
-     
-        }
-      },
-    currentLocationDate:Date,
-    contacts:[
-        {
-            type: mongoose.Schema.ObjectId,
-            ref:'User',
-            required:[true,'A friend must have an id'],
-            date : Date.now()
-        }
-    ]
+    user2:{  
+        type: mongoose.Schema.ObjectId,
+        ref:'User',
+        required:[true,'Contacts must belong to an user']
+    },
+    contactDate : {
+        type : Date,
+        default : Date.now
+    }
 
 
  
