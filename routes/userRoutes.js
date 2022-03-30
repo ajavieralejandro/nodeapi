@@ -25,6 +25,7 @@ userRouter.get('/test',userController.test);
 //Protected Routes
 
 userRouter.use(authController.protectRoute);
+userRouter.get('/checkToken',authController.checkToken);
 userRouter.post('/findFriends',userController.getContactsWithin,userController.findFriends);
 userRouter.post('/setCurrentLocation',userController.setCurrentLocation);
 userRouter.get('/getLocations',userController.getLocations);

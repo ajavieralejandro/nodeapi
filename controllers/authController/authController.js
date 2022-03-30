@@ -92,7 +92,6 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.protectRoute = catchAsync(async (req, res, next) => {
   //checking t2hat the token exist
-  console.log("hola 1");
   let token = null;
   if (
     req.headers.authorization &&
@@ -100,12 +99,10 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
   )
     token = req.headers.authorization.split(' ')[1];
   if (!token) return next(new AppError('You are not logged!', 401));
-  console.log("hola 2");
 
   //2)Verification Token
   
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log("hola 3");
 
   const user = await User.findById(decoded.id).select('+password');
   if (!user) return next(new AppError('The user not longer exists', 401));
@@ -197,3 +194,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   //4)Send Token
   createSendToken(user, 200, res);
 });
+
+
+exports.checkToken = (req,res,next)=>{
+  res.sendStatus(204);
+}
+
