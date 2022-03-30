@@ -197,6 +197,8 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
 
 exports.checkToken = (req,res,next)=>{
-  res.sendStatus(204);
+  res.status(200).json({
+    status : 'Ok'
+  })
 }
 
