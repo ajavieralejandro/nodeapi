@@ -14,6 +14,7 @@ const Handler = require('../../utils/handlerFactory');
 const handlerFactory = require('../../utils/handlerFactory');
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
+
   var ObjectId = require('mongoose').Types.ObjectId; 
 
   let user = await User.findOne({_id : req.user._id});
@@ -90,10 +91,15 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
 
   //Get Contacts Falta Testear
   exports.getUserContacts = catchAsync(async (req, res, next) => {
+    const _date1 = new Date(new Date().getTime()-(5*24*60*60*1000));
+
   
     var ObjectId = require('mongoose').Types.ObjectId; 
   
-    let _contacts = await Contact.find({$or :[{user1 :new ObjectId(req.user._id)},{user2 :new ObjectId(req.user._id)}] }).populate('user1').populate('user2');
+    let _contacts = await Contact.find({$or :[{user1 :new ObjectId(req.user._id)},{user2 :new ObjectId(req.user._id)}] ,
+     contactDate: {$gte:_date1}
+
+  }).populate('user1').populate('user2');
     let contacts = [];
     for(contact of _contacts){
       let id1 = new ObjectId(req.user._id);
