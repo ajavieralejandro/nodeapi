@@ -64,8 +64,12 @@ exports.setCurrentLocation = catchAsync(async (req,res,next)=>{
 
 
 exports.getLocations = catchAsync(async (req,res,next)=>{
+  console.log("Estoy en get locations");
+  var ObjectId = require('mongoose').Types.ObjectId; 
+  const _date1 = new Date(new Date().getTime()-(5*24*60*60*1000));
+
   let user = req.user;
-  let locations = await Location.find({user : user.id,currentLocationDate: {$lte: (new Date()-35*60000)}});
+  let locations = await Location.find({user : new ObjectId(user.id),locationDate: {$gte:_date1}});
   res.status(200).json({
     status: 'success',
     data : locations
