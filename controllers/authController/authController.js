@@ -46,15 +46,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
 
-
-  //Creo las listas de contactos estrechos y amigos 
-  let _contacts = await Contact.create({
-    user : newUser.id,
-    contacts : []
-  });
-  console.log("Contacts es : ",_contacts);
-  _contacts.save();
-
   createSendToken(newUser, 201, res);
 });
 
@@ -114,7 +105,6 @@ exports.protectRoute = catchAsync(async (req, res, next) => {
 
 //should have an user added to the req first
 exports.restrictTo = (...roles) => (req, _res, next) => {
-  console.log("Hola aparezco aca");
   //
   if (!req.user)
     return next(

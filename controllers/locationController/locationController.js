@@ -40,7 +40,7 @@ exports.setCurrentLocation = catchAsync(async (req,res,next)=>{
   if (!user)
     return next(new AppError("Doesn't found a user with that id, please login again", 404));
   user.currentLocation = toUpdate;
-  user.currentLocationDate = Date.now();
+  user.currentLocationDate = Date.now(); 
   //agrego la nueva locacion
   const _location = new Location({
       user : user._id,
