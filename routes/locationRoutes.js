@@ -19,6 +19,7 @@ locationRouter.use(authController.protectRoute);
 locationRouter.get('/locations',locationController.getLocations);
 locationRouter.post('/setCurrentLocation',locationController.setCurrentLocation);
 locationRouter.get('/updateLocations',locationController.updateLocations);
+locationRouter.get('/getRedLocations',locationController.getRedLocations);
 
 
 

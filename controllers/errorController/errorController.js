@@ -25,7 +25,12 @@ const handleCastErrorDb = err => {
 };
 
 const handleDuplicateFieldsDb = err => {
-  const value = err.keyValue.name;
+  console.log("Hola tengo duplicate fields");
+  console.log(err);
+  var keyName = Object.keys(err.keyValue);
+
+  const value = keyName;
+  
   const message = `Duplicate field value : ${value}`;
   return new AppError(message, 400);
 };
@@ -58,8 +63,7 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     console.log("Hola estoy en prod");
-
-    //console.log(err);
+    console.log(err.code);
     //console.log(err.name);
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let error = { ...err };

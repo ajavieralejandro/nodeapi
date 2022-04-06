@@ -37,9 +37,6 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
 })
 
     for(contact of contactsWithin){
-      console.log('iterando');
-      console.log(req.user._id);
-      console.log(contact)
       let _contactAux = await Contact.create({user1:req.user._id,user2:contact._id});
        _contactAux.save();
     }

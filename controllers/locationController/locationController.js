@@ -100,18 +100,18 @@ exports.updateLocations = catchAsync(async (req,res,next)=>{
 
 
 exports.getContactsWithin = catchAsync(async (req,res,next)=>{
-  console.log("Aca pasa algo");
-  console.log(req.user.currentLocation);
+  //console.log("Aca pasa algo");
+  //console.log(req.user.currentLocation);
   const [long,lat] = req.user.currentLocation.coordinates;
   const radius = 30/6378.1;
-  console.log(long,lat,radius);
-  console.log("Quiero ver que onda");
+  //console.log(long,lat,radius);
+  //console.log("Quiero ver que onda");
   const aux = Date.now();
 
   //debugin code
 
   //let {currentLocationDate} = req.user;
-  console.log("current Location date es : ",req.user.currentLocationDate);
+  //console.log("current Location date es : ",req.user.currentLocationDate);
   let aux2  = (req.user.currentLocationDate - (new Date()-30*600000));
   console.log(aux2);
 
@@ -128,6 +128,47 @@ const userAux = await User.find({ currentLocationDate: {$lte: (new Date()-35*600
 console.log(userAux);
  next();
 });
+
+
+
+exports.getRedLocations = catchAsync(async (req,res,next)=>{
+  
+  const [long,lat] = req.user.currentLocation.coordinates;
+  const radius = 30000/6378.1;
+  const aux = new Date().getTime();
+  const _date1 = new Date((aux)-(7 * 24 * 60 * 60 * 1000));
+
+
+  let users = await Location.find({currentLocation : {$geoWithin : {
+    $centerSphere : [[long,lat],radius],
+  }
+
+}
+,locationDate: {$gte:_date1}
+
+
+}).populate('user');
+
+users = users.filter(user =>
+  user.user.risk_status==="red"
+);
+let toSend = [];
+
+ users.forEach(user =>{
+   toSend.push(user.currentLocation);
+ });
+
+res.status(200).json({
+  status: 'success',
+  data: toSend
+});
+
+
+
+ 
+
+});
+
 
 
 
