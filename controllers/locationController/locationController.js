@@ -132,6 +132,12 @@ console.log(userAux);
 
 
 exports.getRedLocations = catchAsync(async (req,res,next)=>{
+  if(!req.user.currentLocation.coordinates)
+  res.status(200).json({
+    status: 'success',
+    data: []
+  });
+
 
   const [long,lat] = req.user.currentLocation.coordinates;
   const radius = 200/6378.1;
