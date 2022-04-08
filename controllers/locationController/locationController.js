@@ -134,7 +134,7 @@ console.log(userAux);
 exports.getRedLocations = catchAsync(async (req,res,next)=>{
   
   const [long,lat] = req.user.currentLocation.coordinates;
-  const radius = 30000/6378.1;
+  const radius = 200/6378.1;
   const aux = new Date().getTime();
   const _date1 = new Date((aux)-(7 * 24 * 60 * 60 * 1000));
 

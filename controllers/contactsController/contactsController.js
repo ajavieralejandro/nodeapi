@@ -98,18 +98,30 @@ exports.getContactsWithin = catchAsync(async (req,res,next)=>{
 
   }).populate('user1').populate('user2');
     let contacts = [];
+    let contactsAux = [];
+    let toAdd = null;
+    let id1 = new ObjectId(req.user._id);
     for(contact of _contacts){
-      let id1 = new ObjectId(req.user._id);
+      console.log("contactsAux es :",contactsAux);
       let id2 = new ObjectId(contact.user1._id);
+      
+      toAdd = contact.user1;
+      if(id1.equals(id2)){
+        id2 = new ObjectId(contact.user2._id);
+        toAdd = contact.user2;
+      }
+      console.log("Quiero insertar :");
+      console.log(id2);
+      console.log(contactsAux.includes(id2));
+      if(!contactsAux.includes(JSON.stringify(id2))){
+        console.log("Hola estoy insertando");
 
-
-  
-      if(!id1.equals(id2))
-        contacts.push(contact.user1)
-      else
-        contacts.push(contact.user2);
-      contacts = [...new Set(contacts)];
+        contacts.push(toAdd);
+        contactsAux.push(JSON.stringify(id2));
+      }
+      
     };
+    console.log("Contacts aux es al finalizar :",contactsAux);
     res.status(200).json({
       status: 'success',
       data: contacts
